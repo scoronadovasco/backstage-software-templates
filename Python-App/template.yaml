@@ -31,7 +31,6 @@ spec:
           type: string
           description: description of component
 
-
   steps:
     - id: fetch-base
       name: Fetch Base
@@ -47,8 +46,6 @@ spec:
       name: Publish
       action: publish:github
       input:
-        allowedHosts:
-          - github.com
         description: This is ${{ parameters.component_id }}
         repoUrl: github.com?owner=scoronadovasco&repo=${{parameters.component_id}}
         protectDefaultBranch: false
