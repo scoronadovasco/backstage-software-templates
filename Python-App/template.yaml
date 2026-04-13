@@ -26,6 +26,11 @@ spec:
           enum:
             - dev
             - prod
+        description:
+          title: Component description
+          type: string
+          description: description of component
+
 
   steps:
     - id: fetch-base
@@ -36,6 +41,7 @@ spec:
         values:
           app_name: ${{parameters.component_id}}
           app_env: ${{parameters.environment}}
+          app_description: ${{parameters.description}}
 
     - id: publish
       name: Publish
