@@ -28,6 +28,7 @@ jobs:
         with:
           push: true
           tags: scoronadovasco/${{values.app_name}}:${{ '${{ env.COMMIT_ID }}' }}
+          
     outputs:
       commit_id: ${{ '${{ env.COMMIT_ID }}' }}
 
@@ -90,3 +91,15 @@ jobs:
         run: |
           argocd app sync ${{values.app_name}}
           argocd app wait ${{values.app_name}} --timeout 180
+
+      - name: Make repository public
+        shell: bash
+        run: |
+          TOKEN=$(curl -s -X POST "https://hub.docker.com/v2/users/login" \
+            -H "Content-Type: application/json" \
+            -d '{"username":"${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}","password":"${{ '${{ secrets.DOCKERHUB_TOKEN }}' }}"}' \
+            | jq -r '.token')
+          curl -s -X PATCH "https://hub.docker.com/v2/repositories/scoronadovasco/${{values.app_name}}/" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{"is_private": false}'
