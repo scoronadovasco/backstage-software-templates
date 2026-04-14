@@ -5,8 +5,8 @@ on:
     paths:
       - src/**
     branches:
-      - master
-
+      - main
+    workflow_dispatch:
 jobs:
   ci:
     runs-on: ubuntu-latest
