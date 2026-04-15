@@ -66,33 +66,28 @@ jobs:
           chmod +x argocd
           sudo mv ./argocd /usr/local/bin/argocd
 
-      - name: argocd login
-        shell: bash
-        run: |
-          argocd login argocd-server.argocd \
-            --insecure  \
-            --grpc-web \
-            --username admin \
-            --password  ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
-
       - name: Ensure argocd repo and app
         shell: bash
         run: |
-
-          # Connects the argocd repo
-          repo="https://github.com/scoronadovasco1205/${{values.app_name}}.git"
-          argocd repo list | grep -q $repo || argocd repo add $repo
-
-          # Creates the argocd app
-          argocd app get ${{values.app_name}} || argocd app create ${{values.app_name}} \
+          argocd login 172.20.46.108 \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password ${{ secrets.ARGOCD_PASSWORD }}
+      
+          repo="https://github.com/scoronadovasco1205/fast-api.git"
+          argocd repo add $repo --upsert
+      
+          argocd app create fast-api \
             --repo $repo \
-            --path charts/${{values.app_name}} \
-            --dest-namespace ${{values.app_env}} \
+            --path charts/fast-api \
+            --dest-namespace dev \
             --dest-server https://kubernetes.default.svc \
-            --values values-${{values.app_env}}.yaml \
-            --revision master \
+            --values values-dev.yaml \
+            --revision main \
             --sync-policy manual \
-            --sync-option CreateNamespace=true
+            --sync-option CreateNamespace=true \
+            --upsert     
 
       - name: Argocd app sync
         shell: bash
