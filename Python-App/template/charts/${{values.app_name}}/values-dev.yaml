@@ -1,6 +1,16 @@
 replicaCount: 1
-
 resources:
   requests:
-    cpu: 50mi
-    memory: 120m
+    cpu: 50m
+    memory: 120Mi
+image:
+  tag: '87dcc6'
+httpRoute:
+  enabled: false
+  hostnames: []
+  parentRefs: []
+  rules: []
+
+service:
+  type: ClusterIP
+  port: 5000

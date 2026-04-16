@@ -3,3 +3,14 @@ resources:
   requests:
     cpu: 50m
     memory: 120Mi
+image:
+  tag: '87dcc6'
+httpRoute:
+  enabled: false
+  hostnames: []
+  parentRefs: []
+  rules: []
+
+service:
+  type: ClusterIP
+  port: 5000
